@@ -71,7 +71,7 @@
      */
     
     //全局事件
-    globalMonitor = [NSEvent addGlobalMonitorForEventsMatchingMask:NSLeftMouseDownMask | NSRightMouseDownMask | NSMouseMovedMask | NSLeftMouseDraggedMask | NSRightMouseDraggedMask | NSKeyDownMask | NSFlagsChangedMask handler:^(NSEvent * _Nonnull event) {
+    globalMonitor = [NSEvent addGlobalMonitorForEventsMatchingMask:NSLeftMouseDownMask | NSRightMouseDownMask | NSOtherMouseDownMask | NSMouseMovedMask | NSLeftMouseDraggedMask | NSRightMouseDraggedMask | NSOtherMouseDragged | NSScrollWheelMask | NSKeyDownMask | NSFlagsChangedMask handler:^(NSEvent * _Nonnull event) {
         [self getEvent:event];
     }];
     
@@ -116,6 +116,7 @@
             break;
             
         case NSMouseMoved:
+        case NSOtherMouseDragged:
         case NSLeftMouseDragged:
         case NSRightMouseDragged:{
             NSInteger delta = (NSInteger)sqrt(event.deltaX*event.deltaX + event.deltaY*event.deltaY);
@@ -123,6 +124,8 @@
             break;
         }
             
+        case NSScrollWheel:
+        case NSOtherMouseDown:
         case NSKeyDown:
         case NSFlagsChanged:
             _keyDownCount++;
@@ -268,18 +271,20 @@ CGEventRef myCallBack(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
     return _running;
 }
 
+/**
+ *  是否有正在运行的监控目标，使用数据库进行匹配，物理保证准确
+ *
+ *  @return 当且仅当所有的目标程序都处于退出状态，才返回 NO，否则返回 YES
+ */
 - (BOOL)isAnyoneTargetAppRunning{
     __block BOOL hasAnyone = NO;
     
-    NSArray<IRApplication *>* allApps = [IRApplication allApplications];
+    NSArray<IRApplication *>* selectedApps = [IRApplication allSelectedApplications];
     
     [[IRApplication runningApplications] enumerateObjectsUsingBlock:^(IRApplication * _Nullable obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([allApps containsApp:obj]) {
-            obj = [obj exist];
-            if (obj.isSelected) {
-                hasAnyone = YES;
-                *stop = YES;
-            }
+        if ([selectedApps containsApp:obj]) {
+            hasAnyone = YES;
+            *stop = YES;
         }
     }];
     

@@ -40,7 +40,9 @@
 
 - (BOOL)appDidUpdateState;
 
-+ (NSArray<IRApplication *> * __nullable)allApplications;
++ (NSArray<IRApplication *> * __nonnull)allApplications;
+
++ (NSArray<IRApplication *> * __nonnull)allSelectedApplications;
 
 - (instancetype __nullable)exist;
 
@@ -50,6 +52,6 @@
 
 @interface NSArray<ObjectType> (IR)
 
-- (BOOL)containsApp:(IRApplication *)app;
+- (BOOL)containsApp:(IRApplication * _Nonnull)app;
 
 @end

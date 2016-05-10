@@ -179,6 +179,24 @@
     return apps;
 }
 
++ (NSArray<IRApplication *> *)allSelectedApplications{
+    NSString* sql = @"SELECT * FROM targets WHERE selected=1";
+    
+    __block NSMutableArray<IRApplication *> * apps = [[NSMutableArray alloc] init];
+    
+    [[IRApplication sharedDatabaseQueue] inDatabase:^(FMDatabase *db) {
+        FMResultSet* rs = [db executeQuery:sql];
+        while ([rs next]) {
+            IRApplication* app = [[IRApplication alloc] initWithResultSet:rs];
+            
+            [apps addObject:app];
+        }
+        [rs close];
+    }];
+    
+    return apps;
+}
+
 - (void)dealloc{
     [[IRApplication sharedDatabaseQueue] close];
 }
