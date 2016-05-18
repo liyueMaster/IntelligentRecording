@@ -191,6 +191,17 @@ CGEventRef myCallBack(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
             NSString *urlString = @"x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility";
             [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:urlString]];
         }
+        
+//        NSRunningApplication* app = [NSRunningApplication currentApplication];
+//        
+//        AXError error = AXMakeProcessTrusted((__bridge CFStringRef _Nonnull)(app.executableURL.path));
+//        
+//        if (error == kAXErrorSuccess) {
+//            NSLog(@"获取控制权限成功，请重新启动应用...");
+//        } else {
+//            NSLog(@"%d", (int)error);
+//        }
+        
     }
 }
 
