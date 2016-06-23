@@ -22,11 +22,18 @@
 
 - (instancetype __nullable)initWithRunningApp:(NSRunningApplication * __nonnull)app;
 
+- (instancetype __nullable)initWithPath:(NSString * __nonnull)path;
+
 @property (readonly) NSInteger dbIndex;
 
 @property (nonatomic, getter=isSelected) BOOL selected;
 
 + (NSArray<IRApplication *> * __nonnull)runningApplications;
+
++ (NSArray<IRApplication *> * __nonnull)allApplicationsInstalled:(BOOL)autoExclude;
+
+//自动完善数据库
++ (void)updateApplicationListToLast;
 
 @end
 

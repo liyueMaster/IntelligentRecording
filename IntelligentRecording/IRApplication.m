@@ -14,7 +14,7 @@
 
 @implementation IRApplication
 
-- (instancetype)initWithRunningApp:(NSRunningApplication *)app{
+- (instancetype)initWithRunningApp:(NSRunningApplication *)app {
     self = [super init];
     if (self == nil) {
         return nil;
@@ -27,6 +27,30 @@
     _bundleURL = app.bundleURL;
     _executableURL = app.executableURL;
     _icon = app.icon;
+    
+    return self;
+}
+
+- (instancetype)initWithPath:(NSString *)path {
+    self = [super init];
+    if (self == nil) {
+        return nil;
+    }
+    
+    _dbIndex = -1;
+    _selected = NO;
+    
+    NSBundle *bundle = [NSBundle bundleWithPath:path];
+    if (bundle == nil || bundle.bundleIdentifier == nil) {
+        return nil;
+    }
+    NSString *localizedName = bundle.localizedInfoDictionary[@"CFBundleName"];
+    _localizedName = localizedName ? localizedName : bundle.infoDictionary[@"CFBundleName"];
+    _bundleIdentifier = bundle.bundleIdentifier;
+    _bundleURL = bundle.bundleURL;
+    _executableURL = bundle.executableURL;
+    
+    _icon = [[NSWorkspace sharedWorkspace] iconForFile:path];
     
     return self;
 }
@@ -44,6 +68,72 @@
     }];
     
     return runningApps;
+}
+
++ (NSArray<IRApplication *> *)allApplicationsInstalled:(BOOL)autoExclude{
+    NSMutableArray<IRApplication *> * apps = [[NSMutableArray alloc] init];
+    [[IRApplication allApplicationPaths:@"/Applications"] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (autoExclude && [obj containsString:@"/Utilities"]) {
+            return;
+        }
+        
+        IRApplication* app = [[IRApplication alloc] initWithPath:obj];
+        if (app != nil) {
+            [apps addObject:app];
+        }
+    }];
+    
+    return apps;
+}
+
++ (NSArray<NSString *> *)allApplicationPaths:(NSString *)path{
+    NSMutableArray<NSString *> * appPaths = [[NSMutableArray alloc] init];
+    
+    // 1. 判断文件还是目录
+    NSFileManager * fileManger = [NSFileManager defaultManager];
+    BOOL isDir = NO;
+    BOOL isExist = [fileManger fileExistsAtPath:path isDirectory:&isDir];
+    if (isExist) {
+        // 2. 判断是不是目录
+        if (isDir) {
+            
+            //3. 判断是不是应用程序
+            BOOL isApp = [path hasSuffix:@".app"];
+            if (isApp) {
+                //NSLog(@"%@", path);
+                [appPaths addObject:path];
+            } else {
+                NSArray * dirArray = [fileManger contentsOfDirectoryAtPath:path error:nil];
+                NSString * subPath = nil;
+                for (NSString * str in dirArray) {
+                    subPath  = [path stringByAppendingPathComponent:str];
+                    BOOL issubDir = NO;
+                    [fileManger fileExistsAtPath:subPath isDirectory:&issubDir];
+                    [appPaths addObjectsFromArray:[IRApplication allApplicationPaths:subPath]];
+                }
+            }
+        }
+    }
+    
+    return appPaths;
+}
+
++ (void)updateApplicationListToLast{
+    NSArray<IRApplication *>* allApps = [IRApplication allApplications];
+    
+    [[IRApplication runningApplications] enumerateObjectsUsingBlock:^(IRApplication * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![allApps containsApp:obj]) {
+            [obj save];
+        }
+    }];
+    
+    allApps = [IRApplication allApplications];
+    
+    [[IRApplication allApplicationsInstalled:YES] enumerateObjectsUsingBlock:^(IRApplication * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![allApps containsApp:obj]) {
+            [obj save];
+        }
+    }];
 }
 
 - (instancetype)initWithResultSet:(FMResultSet *)rs{
