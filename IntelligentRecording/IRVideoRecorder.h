@@ -8,6 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+struct ActiveDisplayList {
+    uint32_t count;
+    CGDirectDisplayID* activeDisplayIDs;
+};
+typedef struct ActiveDisplayList ActiveDisplayList;
+
+NS_INLINE ActiveDisplayList WSMakeActiveDisplayList(uint32_t count, CGDirectDisplayID* activeDisplayIDs) {
+    ActiveDisplayList list;
+    list.count = count;
+    list.activeDisplayIDs = activeDisplayIDs;
+    return list;
+}
+
 /**
  *  智能录屏组件--录屏模块，不仅支持自定义帧率、比特率、视频尺寸
  *  等常见视频参数；
@@ -137,7 +150,7 @@
  *
  *  @return CGDirectDisplayID数组
  */
-+ (CGDirectDisplayID *)getMonitors;
++ (ActiveDisplayList)getMonitors;
 
 /**
  *  用于销毁定时器

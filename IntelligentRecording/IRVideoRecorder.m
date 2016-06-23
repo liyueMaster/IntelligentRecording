@@ -99,6 +99,7 @@
 }
 
 - (void)setCapturesMouseClicks:(BOOL)capturesMouseClicks{
+    _capturesMouseClicks = capturesMouseClicks;
     [_inputDesktop setCapturesMouseClicks:capturesMouseClicks];
 }
 
@@ -342,7 +343,7 @@
     _currentRecordTime++;
 }
 
-+ (CGDirectDisplayID *)getMonitors{
++ (ActiveDisplayList)getMonitors{
     //kCGErrorSuccess
     uint32_t maxDisplays = MAX_DISPLAY;
     static CGDirectDisplayID activeDisplayIDs[MAX_DISPLAY];
@@ -350,10 +351,10 @@
     
     if(CGGetActiveDisplayList(maxDisplays, activeDisplayIDs, &displayCount) != kCGErrorSuccess){
         NSLog(@"获取监视器列表失败.");
-        return 0;
+        return WSMakeActiveDisplayList(0, 0);
     }
     
-    return activeDisplayIDs;
+    return WSMakeActiveDisplayList(displayCount, activeDisplayIDs);
 }
 
 - (void)invalidateTimer{

@@ -93,6 +93,12 @@
     [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self selector:@selector(getApplicationDidLaunch:) name:NSWorkspaceDidLaunchApplicationNotification object:nil];
     [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver:self selector:@selector(getApplicationDidTerminate:) name:NSWorkspaceDidTerminateApplicationNotification object:nil];
     
+    //监听其他通知，后期控制监测更加准确
+    [[NSWorkspace sharedWorkspace].notificationCenter addObserver:self selector:@selector(getApplicationStateChange:) name:NSWorkspaceDidHideApplicationNotification object:nil];
+    [[NSWorkspace sharedWorkspace].notificationCenter addObserver:self selector:@selector(getApplicationStateChange:) name:NSWorkspaceDidUnhideApplicationNotification object:nil];
+    [[NSWorkspace sharedWorkspace].notificationCenter addObserver:self selector:@selector(getApplicationStateChange:) name:NSWorkspaceDidActivateApplicationNotification object:nil];
+    [[NSWorkspace sharedWorkspace].notificationCenter addObserver:self selector:@selector(getApplicationStateChange:) name:NSWorkspaceDidDeactivateApplicationNotification object:nil];
+    
     return self;
 }
 
@@ -260,6 +266,13 @@ CGEventRef myCallBack(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
             [self.delegate monitor:self applicationDidTerminate:runnningApp];
         }
     }
+}
+
+- (void)getApplicationStateChange:(NSNotification *)not {
+    NSRunningApplication* runnningApp = [not.userInfo objectForKey:@"NSWorkspaceApplicationKey"];
+    NSLog(@"%@ %@", runnningApp.localizedName, not.name);
+    NSLog(@"userInfo:\n%@", not.userInfo);
+    NSLog(@"object:%@", not.object);
 }
 
 - (BOOL)start{
