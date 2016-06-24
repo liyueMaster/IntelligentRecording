@@ -30,9 +30,6 @@
 		20BDA7E41CD9F81800B5BC2F /* FMResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 20BDA7DA1CD9F81800B5BC2F /* FMResultSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		20BDA7E51CD9F81800B5BC2F /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 20BDA7DB1CD9F81800B5BC2F /* FMResultSet.m */; };
 		20BDA7E71CD9F93900B5BC2F /* FMDatabase+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 20BDA7E61CD9F93900B5BC2F /* FMDatabase+Private.h */; };
-		20BF9DF21CCF12E4006B0472 /* IRApplicationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 20BF9DEF1CCF12E4006B0472 /* IRApplicationController.h */; };
-		20BF9DF31CCF12E4006B0472 /* IRApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20BF9DF01CCF12E4006B0472 /* IRApplicationController.m */; };
-		20BF9DF41CCF12E4006B0472 /* IRApplicationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 20BF9DF11CCF12E4006B0472 /* IRApplicationController.xib */; };
 		20D6A6081C97E4750079E02C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20D6A6071C97E4750079E02C /* Cocoa.framework */; };
 		20D6A60A1C97E4810079E02C /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20D6A6091C97E4810079E02C /* OpenGL.framework */; };
 		20D6A60C1C97E48C0079E02C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20D6A60B1C97E48C0079E02C /* QuartzCore.framework */; };
@@ -395,9 +392,6 @@
 		20BDA7DA1CD9F81800B5BC2F /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		20BDA7DB1CD9F81800B5BC2F /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		20BDA7E61CD9F93900B5BC2F /* FMDatabase+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FMDatabase+Private.h"; sourceTree = "<group>"; };
-		20BF9DEF1CCF12E4006B0472 /* IRApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRApplicationController.h; sourceTree = "<group>"; };
-		20BF9DF01CCF12E4006B0472 /* IRApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IRApplicationController.m; sourceTree = "<group>"; };
-		20BF9DF11CCF12E4006B0472 /* IRApplicationController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IRApplicationController.xib; sourceTree = "<group>"; };
 		20D6A6071C97E4750079E02C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		20D6A6091C97E4810079E02C /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		20D6A60B1C97E48C0079E02C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -832,9 +826,6 @@
 				20E86B0C1C96AE0F00C9ABEF /* PrefixHeader.pch */,
 				20582F4C1CCDFE0D004219F4 /* IRApplication.h */,
 				20582F4D1CCDFE0D004219F4 /* IRApplication.m */,
-				20BF9DEF1CCF12E4006B0472 /* IRApplicationController.h */,
-				20BF9DF01CCF12E4006B0472 /* IRApplicationController.m */,
-				20BF9DF11CCF12E4006B0472 /* IRApplicationController.xib */,
 				20E86B0D1C96AF8700C9ABEF /* IRVideoRecorder.h */,
 				20E86B0E1C96AF8700C9ABEF /* IRVideoRecorder.m */,
 				2038C42A1C9FE2F700D4DC16 /* IRActsMonitor.h */,
@@ -1320,7 +1311,6 @@
 				20E86AF61C96ADE100C9ABEF /* GPUImageZoomBlurFilter.h in Headers */,
 				20E86A261C96ADE100C9ABEF /* GPUImageHalftoneFilter.h in Headers */,
 				20E86A3A1C96ADE100C9ABEF /* GPUImageLuminosity.h in Headers */,
-				20BF9DF21CCF12E4006B0472 /* IRApplicationController.h in Headers */,
 				20E86A7C1C96ADE100C9ABEF /* GPUImageRGBOpeningFilter.h in Headers */,
 				20E869DE1C96ADE100C9ABEF /* GPUImageColorBurnBlendFilter.h in Headers */,
 				20E86B001C96ADE100C9ABEF /* GPUImageColorConversion.h in Headers */,
@@ -1536,7 +1526,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				20E869C91C96ADE100C9ABEF /* lookup.png in Resources */,
-				20BF9DF41CCF12E4006B0472 /* IRApplicationController.xib in Resources */,
 				20E869CD1C96ADE100C9ABEF /* lookup_soft_elegance_2.png in Resources */,
 				20E869CC1C96ADE100C9ABEF /* lookup_soft_elegance_1.png in Resources */,
 				20E869CA1C96ADE100C9ABEF /* lookup_amatorka.png in Resources */,
@@ -1619,7 +1608,6 @@
 				20E86AEB1C96ADE100C9ABEF /* GPUImageThresholdEdgeDetectionFilter.m in Sources */,
 				20E86AF71C96ADE100C9ABEF /* GPUImageZoomBlurFilter.m in Sources */,
 				20E86A431C96ADE100C9ABEF /* GPUImagePixellatePositionFilter.m in Sources */,
-				20BF9DF31CCF12E4006B0472 /* IRApplicationController.m in Sources */,
 				20E86A4B1C96ADE100C9ABEF /* GPUImageSaturationFilter.m in Sources */,
 				20E86A4D1C96ADE100C9ABEF /* GPUImageSepiaFilter.m in Sources */,
 				20E869F31C96ADE100C9ABEF /* GPUImageLinearBurnBlendFilter.m in Sources */,
@@ -1907,6 +1895,7 @@
 				20BDA7C91CD9F62A00B5BC2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		20E868641C96AD6600C9ABEF /* Build configuration list for PBXProject "IntelligentRecording" */ = {
 			isa = XCConfigurationList;

@@ -352,6 +352,10 @@ CGEventRef myCallBack(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
 - (BOOL)isAppSelected:(NSRunningApplication *)app{
     IRApplication* iapp = [[IRApplication alloc] initWithRunningApp:app];
     
+    if (iapp == nil) {
+        return NO;
+    }
+    
     iapp = [iapp exist];
     
     return iapp != nil && iapp.isSelected;

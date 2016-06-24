@@ -26,11 +26,13 @@
 
 @property (readonly) NSInteger dbIndex;
 
-@property (nonatomic, getter=isSelected) BOOL selected;
+@property (readonly, getter=isSystem) BOOL system;
+
+@property (getter=isSelected) BOOL selected;
 
 + (NSArray<IRApplication *> * __nonnull)runningApplications;
 
-+ (NSArray<IRApplication *> * __nonnull)allApplicationsInstalled:(BOOL)autoExclude;
++ (NSArray<IRApplication *> * __nonnull)allApplicationsInstalled;
 
 //自动完善数据库
 + (void)updateApplicationListToLast;
@@ -47,7 +49,7 @@
 
 - (BOOL)appDidUpdateState;
 
-+ (NSArray<IRApplication *> * __nonnull)allApplications;
++ (NSArray<IRApplication *> * __nonnull)allApplications:(BOOL)containSystemApp;
 
 + (NSArray<IRApplication *> * __nonnull)allSelectedApplications;
 
@@ -60,5 +62,15 @@
 @interface NSArray<ObjectType> (IR)
 
 - (BOOL)containsApp:(IRApplication * _Nonnull)app;
+
+@end
+
+@interface NSImage (Icon)
+
+/**
+ *  图片包含多种大小格式，保留最大的值
+ *
+ */
+- (void)removeRepresentationsExceptBiggest;
 
 @end
