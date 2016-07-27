@@ -18,6 +18,10 @@
     GPUImageGrayscaleFilter* _grayscaleFilter;
     //GPUImageTransformFilter* _transformFilter;
     
+    //水印
+    GPUImagePicture* _imageForBlending;
+    GPUImageAlphaBlendFilter* _blendFilter;
+    
     GPUImageMovieWriter* _movieWriter;
     
     NSMutableDictionary* _videoSettings;
@@ -135,6 +139,7 @@
     [_inputDesktop setTimescale:_timeLapseMultiple];
     [_inputDesktop setFrameRate:_framesPerSecond];
     [_inputDesktop setCapturesMouseClicks:_capturesMouseClicks];
+    //[_inputDesktop setRunBenchmark:YES];
     
     NSRect fullScreenRect = CGDisplayBounds(_recordDisplayId);  //全屏尺寸
     NSSize sourceSize = fullScreenRect.size;    //源尺寸，如果是区域录屏就是区域尺寸
@@ -244,6 +249,14 @@
     //[_inputDesktop setAudioEncodingTarget:_movieWriter];
     //Audio Units
     
+    //水印滤镜
+    //------------------------------------------------------------------------------------------------
+//    _blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
+//    _blendFilter.mix = 1.0;
+//    [_blendFilter forceProcessingAtSize:_videoSize];
+//    [units addObject:_blendFilter];
+    //-------------------------------------------------------------------------------------------
+    
     [units addObject:_movieWriter];
     
     [units enumerateObjectsUsingBlock:^(id<GPUImageInput> target, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -254,7 +267,24 @@
         }
     }];
     
-    [NSDate date];
+    //水印图片
+    //------------------------------------------------------------------------------------------------
+//    NSImage* img = [NSImage imageWithSize:_videoSize flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
+//        [[NSColor clearColor] set];
+//        NSRectFill(dstRect);
+//        
+//        NSString* str = [[NSDate date] description];
+//        NSFont *font = [NSFont systemFontOfSize:8];
+//        NSDictionary* attributes = [NSDictionary dictionaryWithObjectsAndKeys: font, NSFontAttributeName, [NSColor redColor],NSForegroundColorAttributeName, nil];
+//        [[NSColor redColor] set];
+//        [str drawAtPoint:NSMakePoint(0, 0) withAttributes:attributes];
+//        
+//        return YES;
+//    }];
+//    _imageForBlending = [[GPUImagePicture alloc] initWithImage:img smoothlyScaleOutput:YES];
+//    [_imageForBlending processImage];
+//    [_imageForBlending addTarget:_blendFilter];
+    //-------------------------------------------------------------------------------------------
     
     return YES;
 }

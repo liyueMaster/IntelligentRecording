@@ -32,6 +32,12 @@
     CMTimeValue pausedTimeValue;
     
     NSInteger ignoredFramesCount;
+    
+    //水印
+    CIContext* ciContext;
+    NSDateFormatter *formatter;
+    NSFont *font;
+    NSDictionary* attributes;
 }
 
 - (void)convertYUVToRGBOutput;
@@ -59,8 +65,13 @@
     lastVideoTimeValue = 0;
     lastReallyTimeValue = 0;
     pausedTimeValue = 0;
+    _watermark = YES;
     
-    //ignoredFramesCount = 0;
+    ciContext = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer: @NO}];
+    formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    font = [NSFont systemFontOfSize:24];
+    attributes = [NSDictionary dictionaryWithObjectsAndKeys: font, NSFontAttributeName, [NSColor redColor],NSForegroundColorAttributeName, nil];
     
     cameraProcessingQueue = dispatch_queue_create("com.sunsetlakesoftware.GPUImage.cameraProcessingQueue", NULL);
     
@@ -209,6 +220,12 @@
     [videoOutput setSampleBufferDelegate:nil queue:dispatch_get_main_queue()];
     
     [self removeInputsAndOutputs];
+    
+    ciContext = nil;
+    formatter = nil;
+    font = nil;
+    attributes = nil;
+    frameRenderingSemaphore = 0;
     
     // ARC forbids explicit message send of 'release'; since iOS 6 even for dispatch_release() calls: stripping it out in that case is required.
     //#if ( (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0) || (!defined(__IPHONE_6_0)) )
@@ -400,6 +417,37 @@
     }
 }
 
+- (CGImageRef)createCGImageRefFromNSImage:(NSImage*)image;
+{
+    NSData *imageData;
+    CGImageRef imageRef;
+    @try {
+        imageData = [image TIFFRepresentation];
+        if (imageData) {
+            CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)imageData, NULL);
+            NSDictionary* options = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     (id)kCFBooleanFalse, (id)kCGImageSourceShouldCache,
+                                     (id)kCFBooleanTrue, (id)kCGImageSourceShouldAllowFloat,
+                                     nil];
+            
+            //要用这个带option的 kCGImageSourceShouldCache指出不需要系统做cache操作 默认是会做的
+            imageRef = CGImageSourceCreateImageAtIndex(imageSource, 0, (__bridge CFDictionaryRef)options);
+            CFRelease(imageSource);
+            return imageRef;
+        }else{
+            return NULL;
+        }
+    }
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
+    
+    return NULL;
+}
+
 - (void)processVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 {
     if (ignoredFramesCount++ != 0) {
@@ -444,6 +492,39 @@
     lastVideoTimeValue = currentTime.value;
     
     //--------------------延时录屏----------------------------------
+    
+    
+    
+    //--------------------------水印文字-----------------------------
+    
+    if (_watermark) {
+        //CVPixelBufferRef pixBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+        CVPixelBufferLockBaseAddress(cameraFrame, 0);
+        
+        NSString *currentDateStr = [formatter stringFromDate:[NSDate date]];
+        NSSize textSize = [currentDateStr sizeWithAttributes:attributes];
+        
+        NSImage* img = [NSImage imageWithSize:textSize flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
+            [[NSColor redColor] set];
+            [currentDateStr drawAtPoint:NSMakePoint(0, 0) withAttributes:attributes];
+            return YES;
+        }];
+        currentDateStr = nil;
+        
+        CGImageRef cgImg = [self createCGImageRefFromNSImage:img];
+        img = nil;
+        
+        CIImage* ciImage = [[CIImage alloc] initWithCGImage:cgImg];
+        
+        CFRelease(cgImg);
+        
+        [ciContext render:ciImage toCVPixelBuffer:cameraFrame /*bounds:[ciImage extent] colorSpace:CGColorSpaceCreateDeviceRGB()*/];
+        
+        CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
+    }
+    
+    //----------------------------------------------------------------
+    
      
     [GPUImageContext useImageProcessingContext];
     

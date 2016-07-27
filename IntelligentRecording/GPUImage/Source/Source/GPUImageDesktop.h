@@ -58,6 +58,8 @@
 //延时参数
 @property (readwrite, nonatomic) NSInteger timescale;
 
+@property (nonatomic) BOOL watermark;
+
 - (void)setCapturesMouseClicks:(BOOL)capturesMouseClicks;
 
 /// These properties determine whether or not the two camera orientations should be mirrored. By default, both are NO.
