@@ -270,9 +270,9 @@ CGEventRef myCallBack(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
 
 - (void)getApplicationStateChange:(NSNotification *)not {
     NSRunningApplication* runnningApp = [not.userInfo objectForKey:@"NSWorkspaceApplicationKey"];
-    NSLog(@"%@ %@", runnningApp.localizedName, not.name);
-    NSLog(@"userInfo:\n%@", not.userInfo);
-    NSLog(@"object:%@", not.object);
+    //NSLog(@"%@ %@", runnningApp.localizedName, not.name);
+    //NSLog(@"userInfo:\n%@", not.userInfo);
+    //NSLog(@"object:%@", not.object);
 }
 
 - (BOOL)start{
@@ -344,6 +344,7 @@ CGEventRef myCallBack(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
 
 /**
  *  判断给定的 NSRunningApplication 是否在被用户指定
+ *  如果数据库中不存在当前App，则添加到数据库
  *
  *  @param app 给定的 app
  *
@@ -356,9 +357,14 @@ CGEventRef myCallBack(CGEventTapProxy proxy, CGEventType type, CGEventRef event,
         return NO;
     }
     
-    iapp = [iapp exist];
+    IRApplication* existApp = [iapp exist];
+    if (existApp == nil) {
+        [iapp save];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:IRApplicationListDidUpdate object:nil];
+    }
     
-    return iapp != nil && iapp.isSelected;
+    return existApp != nil && existApp.isSelected;
 }
 
 + (NSArray<NSRunningApplication *> *)getRunningApplications{

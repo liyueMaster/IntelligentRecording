@@ -191,6 +191,8 @@
             [obj save];
         }
     }];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:IRApplicationListDidUpdate object:nil];
 }
 
 - (instancetype)initWithResultSet:(FMResultSet *)rs{

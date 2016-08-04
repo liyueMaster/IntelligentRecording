@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ *  应用程序列表更新
+ */
+#define IRApplicationListDidUpdate @"IRApplicationListDidUpdate"
+
 @protocol IRActsMonitorDelegate;
 
 @interface IRActsMonitor : NSObject
