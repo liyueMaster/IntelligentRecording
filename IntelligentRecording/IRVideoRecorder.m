@@ -49,7 +49,7 @@
     _videoSize = NSMakeSize(CGDisplayPixelsWide(_recordDisplayId), CGDisplayPixelsHigh(_recordDisplayId));
     _autoResize = YES;
     
-    _bitsPerSecond = floor(_videoSize.width * _videoSize.height)/2;
+    _bitsPerSecond = floor(_videoSize.width * _videoSize.height / 1.5);
     
     _grayscale = NO;
     _capturesMouseClicks = NO;
@@ -85,7 +85,7 @@
     }
     
     _videoSize = videoSize;
-    _bitsPerSecond = floor(_videoSize.width * _videoSize.height)/2;
+    _bitsPerSecond = floor(_videoSize.width * _videoSize.height / 1.5);
 }
 
 - (void)setFramesPerSecond:(NSUInteger)framesPerSecond{
