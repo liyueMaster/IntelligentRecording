@@ -38,6 +38,8 @@
     NSDateFormatter *formatter;
     NSFont *font;
     NSDictionary* attributes;
+    
+    NSInteger minorVersion;
 }
 
 - (void)convertYUVToRGBOutput;
@@ -66,6 +68,7 @@
     lastReallyTimeValue = 0;
     pausedTimeValue = 0;
     _watermark = YES;
+    minorVersion = [NSProcessInfo processInfo].operatingSystemVersion.minorVersion;
     
     ciContext = [CIContext contextWithOptions:@{kCIContextUseSoftwareRenderer: @NO}];
     formatter = [[NSDateFormatter alloc] init];
@@ -497,7 +500,8 @@
     
     //--------------------------水印文字-----------------------------
     
-    if (_watermark) {
+    //NSLog(@"%ld.%ld.%ld", [NSProcessInfo processInfo].operatingSystemVersion.majorVersion, [NSProcessInfo processInfo].operatingSystemVersion.minorVersion, [NSProcessInfo processInfo].operatingSystemVersion.patchVersion);
+    if (minorVersion >= 11 && _watermark) {
         //CVPixelBufferRef pixBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
         CVPixelBufferLockBaseAddress(cameraFrame, 0);
         
